@@ -5,7 +5,7 @@ idf_component_register(
         "comm/rpc_cmd_packet.hpp" "comm/rpc_report_packet.hpp"
 
         INCLUDE_DIRS
-        "." "runner" "comm" "misc"
+        "." "reporter" "comm" "misc"
 
         REQUIRES
         "driver" "esp_event" "esp_http_client" "esp-mqtt" "spi_flash" "efuse" "arduino_json"
