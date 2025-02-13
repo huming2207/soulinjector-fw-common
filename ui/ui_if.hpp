@@ -61,19 +61,43 @@ namespace ui_state
     };
 };
 
-class ui_composer_sm
+class ui_composer
 {
 public:
-    virtual esp_err_t init() = 0;
+    enum state : uint32_t
+    {
+        INIT = 0,
+        ERASE = 1,
+        FLASH = 2,
+        TEST  = 3,
+        ERROR = 4,
+        DONE = 5,
+        USB = 6,
+        CONFIG = 7,
+        BIT_READY = BIT(16),
+        BIT_NOT_RENDERING = BIT(17),
+    };
 
 public:
-    // These functions below should be called in UI thread only
-    virtual esp_err_t draw_init(ui_state::queue_item *screen)  = 0;
-    virtual esp_err_t draw_erase(ui_state::queue_item *screen) = 0;
-    virtual esp_err_t draw_flash(ui_state::queue_item *screen) = 0;
-    virtual esp_err_t draw_test(ui_state::queue_item *screen)  = 0;
-    virtual esp_err_t draw_error(ui_state::queue_item *screen) = 0;
-    virtual esp_err_t draw_done(ui_state::queue_item *screen) = 0;
-    virtual esp_err_t draw_usb(ui_state::queue_item *screen) = 0;
-    virtual esp_err_t draw_anything(ui_state::queue_item *screen) = 0;
+    virtual void wait_and_render() = 0;
+    virtual void render_done() = 0;
+};
+
+class ui_screen
+{
+public:
+    enum state
+    {
+        CLEAR = 0,
+        PROGRESS = 1,
+        CURRENT = 2,
+        MESSAGE = 3,
+    };
+
+public:
+    virtual esp_err_t init(lv_obj_t *_base_obj) = 0;
+    virtual void deinit() = 0;
+
+protected:
+    lv_obj_t *base_obj = nullptr;
 };
