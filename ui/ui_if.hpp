@@ -4,63 +4,6 @@
 #include <esp_log.h>
 #include <lvgl.h>
 
-namespace ui_state
-{
-    struct init_screen
-    {
-        char subtitle[32];
-    };
-
-    struct erase_screen
-    {
-        uint8_t percentage;
-        char subtitle[32];
-    };
-
-    struct flash_screen
-    {
-        uint8_t percentage;
-        char subtitle[32];
-    };
-
-    struct test_screen
-    {
-        uint8_t done_test;
-        uint8_t total_test;
-        char subtitle[32];
-    };
-
-    struct error_screen
-    {
-        esp_err_t ret;
-        char comment[32];
-        char qrcode[64];
-    };
-
-    enum display_state : int8_t
-    {
-        STATE_EMPTY = -1,
-        STATE_INIT = 0,
-        STATE_ERASE = 1,
-        STATE_FLASH = 2,
-        STATE_TEST  = 3,
-        STATE_ERROR = 4,
-        STATE_DONE = 5,
-        STATE_USB = 6,
-    };
-
-    struct __attribute__((packed)) queue_item
-    {
-        display_state state;
-        uint8_t percentage;
-        uint8_t total_count;
-        lv_color_t bg_color;
-        char title[16];
-        char comment[32];
-        char qrcode[64];
-    };
-};
-
 class ui_composer
 {
 public:
@@ -74,12 +17,21 @@ public:
         DONE = 5,
         USB = 6,
         CONFIG = 7,
-        BIT_READY = BIT(16),
-        BIT_NOT_RENDERING = BIT(17),
+        BIT_READY = (1u << 16u),
+        BIT_NOT_RENDERING = (1u << 17u),
     };
 
 public:
-    virtual void wait_and_render() = 0;
+    virtual esp_err_t init() = 0;
+    virtual esp_err_t display_init() = 0;
+    virtual esp_err_t display_erase(uint8_t percentage) = 0;
+    virtual esp_err_t display_test(size_t done, size_t total, const char *test_msg) = 0;
+    virtual esp_err_t display_program(uint8_t percentage) = 0;
+    virtual esp_err_t display_done() = 0;
+    virtual esp_err_t display_error(const char *header, const char *err_msg) = 0;
+    virtual esp_err_t display_config() = 0;
+    virtual esp_err_t display_current(float current_ua, float energy_mc, const char *state, lv_color_t state_color) = 0;
+    virtual void wait_and_start_render() = 0;
     virtual void render_done() = 0;
 };
 
