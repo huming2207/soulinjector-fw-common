@@ -67,7 +67,7 @@ esp_err_t mqtt_client::report_stuff(rpc::report::base_event *event, const char *
         return ESP_ERR_NO_MEM;
     }
 
-    char topic_full[sizeof(mq::TOPIC_REPORT_BASE) + sizeof(host_sn) + 16] = {};
+    char topic_full[sizeof(mq::TOPIC_REPORT_BASE) + sizeof(host_sn) + 32] = {};
     snprintf(topic_full, sizeof(topic_full), "%s/" MACSTR "/%s", mq::TOPIC_REPORT_BASE, MAC2STR(host_sn), event_subtopic);
     topic_full[sizeof(topic_full) - 1] = '\0';
 
