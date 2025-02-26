@@ -30,7 +30,7 @@ public:
     virtual esp_err_t display_done() = 0;
     virtual esp_err_t display_error(const char *header, const char *err_msg) = 0;
     virtual esp_err_t display_config() = 0;
-    virtual esp_err_t display_current(float current_ua, float energy_mc, const char *state, lv_color_t state_color) = 0;
+    virtual esp_err_t display_current(double min_ua, double max_ua, double avg_ua, const char *state, lv_color_t state_color) = 0;
     virtual void wait_and_start_render() = 0;
     virtual void render_done() = 0;
 };
