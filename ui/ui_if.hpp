@@ -38,6 +38,8 @@ public:
 class ui_screen
 {
 public:
+    virtual ~ui_screen() = default;
+
     enum state
     {
         CLEAR = 0,
